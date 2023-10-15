@@ -12,6 +12,10 @@ struct ContentView: View {
     @State var correctAnswer = Int.random(in: 0...2)
     @State var scoreTitle = ""
     @State var alertShown = false
+    @State var finalAlertShown = false
+    @State var score = 0
+    @State var questionCounter = 0
+    var numQuestionsPerGame = 8
     var body: some View {
         ZStack{
             RadialGradient(stops: [.init(color: .cyan, location: 0.3), .init(color: .mint, location: 0.3)],center: .top, startRadius: 200, endRadius: 700).ignoresSafeArea()
@@ -30,7 +34,13 @@ struct ContentView: View {
                         Button{
                             print("\(countries[number]) clicked")
                             flagTapped(number: number)
-                            alertShown = true
+                            questionCounter += 1
+                            if questionCounter < numQuestionsPerGame {
+                                alertShown = true
+                            }
+                            else{
+                                finalAlertShown = true
+                            }
                         } label: {
                             Image(countries[number]).clipShape(.rect(cornerRadius: 10))
                         }
@@ -42,27 +52,42 @@ struct ContentView: View {
                 .clipShape(.rect(cornerRadius: 30))
                 //.padding(.horizontal, 20)
                 Spacer()
-                Text("Score: ???").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/.bold())
+                Text("Score: \(score)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/.bold())
                 Spacer()
             }.padding(20)
         }.alert(scoreTitle, isPresented: $alertShown){
-            Button("Continue", action: restartGame)
+            Button("Continue", action: shuffleQuestion)
         } message: {
-            Text("Your score is ???")
+            Text("Your score is \(score)")
+        }
+        .alert(scoreTitle, isPresented: $finalAlertShown){
+            Button("New Game", action: restartGame)
+        } message: {
+            Text("Your FINAL score is \(score)")
         }
     }
     
     func flagTapped(number:Int){
         if number == correctAnswer {
             scoreTitle = "Correct!"
+            score += 1
+            print(score)
         } else{
-            scoreTitle = "Wrong!"
+            scoreTitle = "Wrong, that is the flag of \(countries[number])!"
+            score -= 1
+            print(score)
         }
     }
-    func restartGame(){
+    func shuffleQuestion(){
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
     }
+    func restartGame(){
+        shuffleQuestion()
+        score = 0
+        questionCounter = 0
+    }
+    
     
 }
 
