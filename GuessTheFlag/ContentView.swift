@@ -22,6 +22,21 @@ struct ContentView: View {
     @State var finalAlertShown = false
     @State var score = 0
     @State var questionCounter = 0
+    
+    let labels = [
+        "Estonnia": "Flag with three horizontal stripes, top strip is blue, middle stripe is black, bottom stripe is white",
+        "France": "Flag with three vertical stripes, left is blue, middle is white and right stripe is red",
+        "Germany": "Flag with 3 horizontal stripes, top is black, middle is red and bottom stripe is gold",
+        "Italy": "Flag with three vertical stripes, left stripe is green, middle stripe is wihte and right stripe is red",
+        "Ireland": "Flag with three vertical stripes, left is green, middle is white, ride stripe is Orange",
+        "Nigeria": "Flag with three vertical stripes, left stripe green, middle stripe is white and right stripe is green",
+        "Poalnd": "Flag with two horizontal stripes, top is white, bottom is red",
+        "Spain": "Flag with three horizontal stroipes. Top thin stripe in red, middle thick stripe is gold with crest on the left, bottom thin stripe in red",
+        "UK": "Flag with overlapping red and white corssed, both striaght and diagonally, on a blue background",
+        "Ukraine": "Flag with two horizontal stripes, top stripe is blue, bottom stripe is yellow",
+        "US": "Flag with many red and white stripes with white stars on a blue background in the corner"
+    ]
+    
     var numQuestionsPerGame = 8
     var body: some View {
         ZStack{
@@ -52,6 +67,8 @@ struct ContentView: View {
                             //Image(countries[number]).clipShape(.rect(cornerRadius: 10))
                             FlagView(imageRef: countries[number])
                         }
+                        // adding an accessibility label for voiceover users
+                        .accessibilityLabel(labels[countries[number], default: "Unknown flag"])
                     }
                 }
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
